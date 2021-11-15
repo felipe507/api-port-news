@@ -8,6 +8,7 @@ use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 
+use function PHPUnit\Framework\isEmpty;
 
 class ScrapingController extends Controller
 {   
@@ -25,7 +26,9 @@ class ScrapingController extends Controller
             $news['description'] = $filtro->filter('.feed-post-body-resumo')->text();
             $news['link'] = $filtro->filter('.feed-post-link')->attr('href');
             $news['image'] = $filtro->filter('.bstn-fd-picture-image')->attr('src');
-            //$news['hat'] = $filtro->filter('.feed-post-header-chapeu')->text();
+            if (($filtro->filter('.feed-post-header-chapeu')->count() > 0)) {
+                $news['hat'] = $filtro->filter('.feed-post-header-chapeu')->text(); 
+            }
             $news['timer'] = $filtro->filter('.feed-post-datetime')->text();
             $formatado = json_encode($news);
             print_r($formatado);
